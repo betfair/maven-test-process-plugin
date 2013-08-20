@@ -20,6 +20,7 @@ Licensing
 ---------
 
 The test-process-plugin is covered by "[The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)":
+
     Copyright 2013, The Sporting Exchange Limited
     
     Licensed under the Apache License, Version 2.0 (the "License");
