@@ -16,16 +16,55 @@ limitations under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
 	<groupId>com.betfair.plugins</groupId>
 	<artifactId>maven-test-process-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<version>1.2-SNAPSHOT</version>
+    <name>${artifactId}</name>
+    <description>Test process plugin</description>
+    <url>http://github.com/betfair/maven-test-process-plugin</url>
 
     <scm>
         <connection>scm:git:git@github.com:betfair/maven-test-process-plugin.git</connection>
         <url>scm:git:git@github.com:betfair/maven-test-process-plugin.git</url>
         <developerConnection>scm:git:git@github.com:betfair/maven-test-process-plugin.git</developerConnection>
     </scm>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>all</id>
+            <email>maven-test-process-plugin@googlegroups.com</email>
+            <name>Test Process Plugin Developers</name>
+        </developer>
+    </developers>
+
+    <mailingLists>
+        <mailingList>
+            <name>Mailing list</name>
+            <post>maven-test-process-plugin@googlegroups.com</post>
+        </mailingList>
+    </mailingLists>
+
+    <organization>
+        <name>Betfair</name>
+        <url>http://www.betfair.com</url>
+    </organization>
 
 	<build>
 		<plugins>
