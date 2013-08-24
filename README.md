@@ -28,6 +28,7 @@ Snapshots can be found in the [OSS Sonatype Snapshot repository](https://oss.son
 Releases will be made to the [OSS Sonatype Release repository](https://oss.sonatype.org/content/repositories/releases) which is synced [Maven Central](http://repo1.maven.org/maven2).
 
 Handily both of these are proxied by the following repository group:
+
     <pluginRepositories>
         <pluginRepository>
             <id>sonatype</id>
