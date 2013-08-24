@@ -25,31 +25,37 @@ import java.util.Map;
  */
 public class ContainerProcess {
 	/**
-	 * @parameter
-     * @required
+     * Id for this container process
+     * @parameter default-value='default'
 	 */
 	private String id;
+
 	/**
+     * The command to execute this container process
 	 * @parameter
      * @required
 	 */
-	private String process;
+	private String command;
 
 	/**
+     * The working directory in which to run the command. This is relative to the directory the original maven command was run from.
 	 * @parameter
      * @required
 	 */
 	private String workingDir;
    /**
+    * Text to look for in the process output to denote that the process has failed.
     * @parameter
     */
    private String failureWatchString;
    /**
+    * Text to look for in the process output to denote that the process has started.
     * @parameter
     */
-   private String watchString;
+   private String startWatchString;
 
     /**
+     * Environment properties to set when starting the process.
      * @parameter
      */
     private Map<String,String> environmentProperties;
@@ -58,17 +64,17 @@ public class ContainerProcess {
     public ContainerProcess() {
     }
 
-    public ContainerProcess(String id, String process, String workingDir, String failureWatchString, String watchString, Map<String, String> environmentProperties) {
+    public ContainerProcess(String id, String command, String workingDir, String failureWatchString, String startWatchString, Map<String, String> environmentProperties) {
         this.id = id;
-        this.process = process;
+        this.command = command;
         this.workingDir = workingDir;
         this.failureWatchString = failureWatchString;
-        this.watchString = watchString;
+        this.startWatchString = startWatchString;
         this.environmentProperties = environmentProperties;
     }
 
     public ProcessBuilder createProcessBuilder() {
-        String[] testProcessArgs = process.split(" ");
+        String[] testProcessArgs = command.split(" ");
         // deal with paths with a space in them, anything "quoted" will be merged into a single arg
         List<String> args = new ArrayList<String>();
         boolean inQuotes = false;
@@ -76,7 +82,7 @@ public class ContainerProcess {
         for (String s : testProcessArgs) {
             // we'll always start like this
             if (!inQuotes) {
-                // if we've found the start of the quotes, then start the process
+                // if we've found the start of the quotes, then start the command
                 if (s.startsWith("\"")) {
                     mergedItem = s;
                     inQuotes = true;
@@ -101,7 +107,7 @@ public class ContainerProcess {
         if (inQuotes) {
             throw new IllegalStateException("Found unmatched quotes in string: "+mergedItem);
         }
-        // now we can safely build the process
+        // now we can safely build the command
         ProcessBuilder testProcessBuilder = new ProcessBuilder(args);
         if (environmentProperties != null) {
             testProcessBuilder.environment().putAll(environmentProperties);
@@ -115,8 +121,8 @@ public class ContainerProcess {
         return id;
     }
 
-    public String getProcess() {
-        return process;
+    public String getCommand() {
+        return command;
     }
 
     public String getWorkingDir() {
@@ -127,8 +133,8 @@ public class ContainerProcess {
         return failureWatchString;
     }
 
-    public String getWatchString() {
-        return watchString;
+    public String getStartWatchString() {
+        return startWatchString;
     }
 
     @Override

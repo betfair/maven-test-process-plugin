@@ -26,75 +26,41 @@ import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * @goal test
- * 
  * @phase test
- *
  */
 public class ProcessLauncherMojo extends AbstractMojo {
    private static final int processTerminationCharacter = 3; // CTRL-C
    private static final String CONTAINER = "CONTAINER";
    private static final String TESTER = "TESTER";
-	/**
-	 * @parameter
-	 */
-	private String containerProcess;
 
 	/**
+     * Max time (in ms) to allow all containers to start. If all containers are not started in this time then this build will fail.
 	 * @parameter
 	 */
-	private String containerProcessWorkingDir;
-	
-	/**
-	 * @parameter
-	 */
-	private String containerProcessUpString;
+	private String containersStartupTimeout;
 
 	/**
-    * @parameter
-    */
-	private String containerProcessFailureWatchString;
-	/**
+     * Max time (in ms) to allow all test processes to take. If all tests are not completed in this time then this build will fail.
 	 * @parameter
 	 */
-	private String containerProcessStartupTimeout;
-	/**
-	 * @parameter
-	 */
-	private String testProcess;
+	private String testsCompletionTimeout;
 
-	/**
-	 * @parameter
-	 */
-	private String testProcessWorkingDir;
-	/**
-	 * @parameter
-	 */
-	private String testProcessStartupDelay;
-
-	/**
-	 * @parameter
-	 */
-	private String testProcessCompletionTimeout;
    /**
-    * @parameter
-    */
-   private String testProcessFailureWatchString;
-   /**
-    * @parameter
-    */
-   private String testProcessWatchString;
-   /**
+    * Whether to abort early or try to run further test processes if one fails.
     * @parameter default-value='true'
     */
    private boolean failFast = true;
+    /**
+     * The containers to run which will be tested.
+     * @parameter
+     */
+    private ContainerProcess[] containerProcesses;
+
    /**
+    * The test processes which will be run against the containers.
     * @parameter
     */
    private TestProcess[] testProcesses;
-   /**
-    * @parameter
-    */
-   private ContainerProcess[] containerProcesses;
 
 
     private volatile boolean finishImmediately;
@@ -108,25 +74,15 @@ public class ProcessLauncherMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-		List<Process> _containerSystemProcesses = null;
+		List<Process> _containerSystemProcesses;
 		Process _testerProcess = null;
-		ReaderRunnable testReaderRunnable = null;
-		ReaderRunnable containerReaderRunnable = null;
-        String testerId = null;
+		ReaderRunnable testReaderRunnable;
+		ReaderRunnable containerReaderRunnable;
+        String testerId;
 		
 		validate(); 
 
-		int terminationChar = Integer.valueOf(processTerminationCharacter);
-
-        if (testProcesses == null || testProcesses.length == 0) {
-            TestProcess singleProcess = new TestProcess("", testProcess, testProcessWorkingDir, testProcessStartupDelay, testProcessCompletionTimeout, testProcessFailureWatchString, testProcessWatchString, null);
-            testProcesses = new TestProcess[] {singleProcess};
-        }
-
-        if (containerProcesses == null || containerProcesses.length == 0) {
-            ContainerProcess singleProcess = new ContainerProcess("", containerProcess, containerProcessWorkingDir, containerProcessFailureWatchString, containerProcessUpString, null);
-            containerProcesses = new ContainerProcess[] {singleProcess};
-        }
+		int terminationChar = processTerminationCharacter;
 
         finishImmediately = false;
         failed = false;
@@ -147,12 +103,12 @@ public class ProcessLauncherMojo extends AbstractMojo {
             try {
                 containerProcessStartLatches.put(cp, latch);
 
-                getLog().info("Starting '" + cp.getProcess().toString() + "' in directory '" + cp.getWorkingDir() +"'");
+                getLog().info("Starting '" + cp.getCommand() + "' in directory '" + cp.getWorkingDir() +"'");
                 Process _containerProcess = containerProcessBuilder.start();
                 _containerSystemProcesses.add(_containerProcess);
                 containerReaderRunnable = new ReaderRunnable(containerId, _containerProcess.getInputStream(), getLog());
-                if (cp.getWatchString() != null || !"".equals(cp.getWatchString())) {
-                    containerReaderRunnable.setNotifyText(cp.getWatchString());
+                if (cp.getStartWatchString() != null || !"".equals(cp.getStartWatchString())) {
+                    containerReaderRunnable.setNotifyText(cp.getStartWatchString());
                     containerReaderRunnable.setFailureNotifyText(cp.getFailureWatchString());
                 }
 
@@ -160,7 +116,7 @@ public class ProcessLauncherMojo extends AbstractMojo {
                 Thread containerReaderRunnableThread = new Thread(containerReaderRunnable);
                 containerReaderRunnableThread.start();
 
-                getLog().info("Started '" + cp.getProcess().toString() );
+                getLog().info("Started '" + cp.getCommand() );
 
             } catch (IOException e) {
                 throw new MojoExecutionException("Unable to start " + CONTAINER +" process " + e );
@@ -171,7 +127,7 @@ public class ProcessLauncherMojo extends AbstractMojo {
 
         long containerTimeout = -1;
         try {
-            containerTimeout = Long.parseLong(containerProcessStartupTimeout);
+            containerTimeout = Long.parseLong(containersStartupTimeout);
         }
         catch (NumberFormatException nfe) {
             // ignore
@@ -181,12 +137,14 @@ public class ProcessLauncherMojo extends AbstractMojo {
         finishImmediately = false;
 
         // wait for the container to start
+        String currentWaitString = null;
         try {
             boolean anyFailed = false;
             if (containerTimeout == -1) {
                 for (ContainerProcess container : containerProcessStartLatches.keySet()) {
                     CountDownLatch latch = containerProcessStartLatches.get(container);
-                    if (container.getWatchString() != null && !"".equals(container.getWatchString())) {
+                    if (container.getStartWatchString() != null && !"".equals(container.getStartWatchString())) {
+                        currentWaitString = container.getStartWatchString();
                         latch.await();
                     }
                 }
@@ -195,7 +153,7 @@ public class ProcessLauncherMojo extends AbstractMojo {
                 long latestEndTime = System.currentTimeMillis() + containerTimeout;
                 for (ContainerProcess container : containerProcessStartLatches.keySet()) {
                     CountDownLatch latch = containerProcessStartLatches.get(container);
-                    if (container.getWatchString() != null && !"".equals(container.getWatchString())) {
+                    if (container.getStartWatchString() != null && !"".equals(container.getStartWatchString())) {
                         long maxWaitTime = latestEndTime - System.currentTimeMillis();
                         boolean completed = latch.await(maxWaitTime, TimeUnit.MILLISECONDS);
                         if (!completed) {
@@ -211,13 +169,13 @@ public class ProcessLauncherMojo extends AbstractMojo {
                 finishImmediately = true;
             }
         } catch (InterruptedException ie) {
-            getLog().warn("Interrupted waiting for notify text of '" + containerProcessUpString + "' to arrive");
+            getLog().warn("Interrupted waiting for notify text of '" + currentWaitString + "' to arrive");
         }
 
         if (!failed) {
             long uberTimeout = -1;
-            if (testProcessCompletionTimeout != null && !"".equals(testProcessCompletionTimeout)) {
-                uberTimeout = Long.parseLong(testProcessCompletionTimeout);
+            if (testsCompletionTimeout != null && !"".equals(testsCompletionTimeout)) {
+                uberTimeout = Long.parseLong(testsCompletionTimeout);
             }
             long targetEndTime = uberTimeout == -1 ? -1 : System.currentTimeMillis() + uberTimeout;
 
@@ -252,7 +210,7 @@ public class ProcessLauncherMojo extends AbstractMojo {
                     testProcessFinishLatches.put(testerId, latch);
 
                     ProcessBuilder testProcessBuilder = tp.createProcessBuilder();
-                    getLog().info("Starting '" + tp.getProcess() + "' in directory '" + tp.getWorkingDir() + "'");
+                    getLog().info("Starting '" + tp.getCommand() + "' in directory '" + tp.getWorkingDir() + "'");
                     _testerProcess = testProcessBuilder.start();
                     testReaderRunnable = new ReaderRunnable(testerId, _testerProcess.getInputStream(), getLog());
                     testReaderRunnable.setFailureNotifyText(tp.getFailureWatchString());
@@ -276,7 +234,7 @@ public class ProcessLauncherMojo extends AbstractMojo {
                         }
                     });
 
-                    getLog().info("Started '" + tp.getProcess() +"'");
+                    getLog().info("Started '" + tp.getCommand() +"'");
 
                 } catch (IOException e) {
                     getLog().info("Killing "+ CONTAINER + " process due to IO exception in, possibly in TEST PROCESS" + e );
@@ -284,7 +242,7 @@ public class ProcessLauncherMojo extends AbstractMojo {
                 }
 
                 getLog().info("Waiting for " + testerId+" process to complete." );
-                boolean timedOut = false;
+                boolean timedOut;
                 try {
                     long individualTimeout = tp.getCompletionTimeout() != null ? Long.parseLong(tp.getCompletionTimeout()) : -1;
                     long overallTimeout = uberTimeout != -1 ? targetEndTime - System.currentTimeMillis() : -1;
@@ -407,13 +365,21 @@ public class ProcessLauncherMojo extends AbstractMojo {
 	private void validate() throws MojoExecutionException {
 		int errorCount = 0;
 
+
         if (containerProcesses != null && containerProcesses.length > 0) {
+            Set<String> ids = new HashSet<String>();
             for (ContainerProcess cp : containerProcesses) {
                 if (cp.getId() == null || cp.getId().isEmpty()) {
                     getLog().error("containerProcess id not specified");
                     errorCount++;
                 }
-                if (cp.getProcess() == null || cp.getProcess().isEmpty()) {
+                else {
+                    if (!ids.add(cp.getId())) {
+                        getLog().error("There is more than one container process with id '"+cp.getId()+"'");
+                        errorCount++;
+                    }
+                }
+                if (cp.getCommand() == null || cp.getCommand().isEmpty()) {
                     getLog().error("containerProcess not specified");
                     errorCount++;
                 }
@@ -424,22 +390,24 @@ public class ProcessLauncherMojo extends AbstractMojo {
             }
         }
         else {
-            if (containerProcess == null || containerProcess.isEmpty() ) {
-                getLog().error("containerProcess not specified");
-                errorCount++;
-            }
-            if (containerProcessWorkingDir == null || "".equals(containerProcessWorkingDir)) {
-                getLog().error("containerProcessWorkingDir not specified");
-                errorCount++;
-            }
+            getLog().error("No container processes were specified");
+            errorCount++;
         }
+
         if (testProcesses != null && testProcesses.length > 0) {
+            Set<String> ids = new HashSet<String>();
             for (TestProcess tp : testProcesses) {
                 if (tp.getId() == null || tp.getId().isEmpty()) {
                     getLog().error("testProcess id not specified");
                     errorCount++;
                 }
-                if (tp.getProcess() == null || tp.getProcess().isEmpty()) {
+                else {
+                    if (!ids.add(tp.getId())) {
+                        getLog().error("There is more than one test process with id '"+tp.getId()+"'");
+                        errorCount++;
+                    }
+                }
+                if (tp.getCommand() == null || tp.getCommand().isEmpty()) {
                     getLog().error("testProcess not specified");
                     errorCount++;
                 }
@@ -453,18 +421,7 @@ public class ProcessLauncherMojo extends AbstractMojo {
             }
         }
         else {
-        	
-            if (testProcess == null || testProcess.isEmpty()) {
-                getLog().error("testProcess not specified");
-                errorCount++;
-            }
-            if (testProcessWorkingDir == null || "".equals(testProcessWorkingDir)) {
-                getLog().error("testProcessWorkingDir not specified");
-                errorCount++;
-            }
-            if (testProcessStartupDelay == null || "".equals(testProcessStartupDelay)) {
-                getLog().warn("No startup delay specified");
-            }
+            getLog().error("No test processes were specified");
         }
 		if (errorCount > 0) {
 			throw new MojoExecutionException(errorCount + " Configuration error(s) found. Aborting"); 
