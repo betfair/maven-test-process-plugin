@@ -16,6 +16,31 @@ Features
 * Watches output of test processes to detect test success/failure.
 * Can stop on first test failure or let all run to completion.
 
+Releases
+--------
+
+None as yet, although we do have a 1.2-SNAPSHOT floating around in the OSS Sonatype repository.
+
+Maven Repositories
+------------------
+
+Snapshots can be found in the [OSS Sonatype Snapshot repository](https://oss.sonatype.org/content/repositories/snapshots).
+Releases will be made to the [OSS Sonatype Release repository](https://oss.sonatype.org/content/repositories/releases) which is synced [Maven Central](http://repo1.maven.org/maven2).
+
+Handily both of these are proxied by the following repository group:
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sonatype</id>
+            <url>http://repository.sonatype.org/content/groups/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+
 Licensing
 ---------
 
