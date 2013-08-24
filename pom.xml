@@ -16,10 +16,50 @@ limitations under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
 	<groupId>com.betfair.plugins</groupId>
 	<artifactId>maven-test-process-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<version>1.2-SNAPSHOT</version>
+    <name>maven-test-process-plugin</name>
+    <description>Simple plugin to aid testing against containers with blocking startup scripts</description>
+
+    <organization>
+        <name>Betfair</name>
+        <url>http://www.betfair.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>all</id>
+            <name>All developers</name>
+            <email>maven-test-process-plugin@googlegroups.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <url>http://github.com/betfair/maven-test-process-plugin</url>
+
+    <mailingLists>
+        <mailingList>
+            <name>maven-test-process-plugin user list</name>
+            <post>maven-test-process-plugin@googlegroups.com</post>
+            <archive>https://groups.google.com/forum/#!forum/maven-test-process-plugin</archive>
+        </mailingList>
+    </mailingLists>
 
     <scm>
         <connection>scm:git:git@github.com:betfair/maven-test-process-plugin.git</connection>
