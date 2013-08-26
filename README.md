@@ -1,3 +1,5 @@
+Note: documentation is moving to http://betfair.github.io/maven-test-process-plugin/
+
 maven-test-command-plugin
 =========================
 
