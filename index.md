@@ -1,7 +1,5 @@
 ---
 ---
-a
-
 maven-test-process-plugin
 =========================
 
