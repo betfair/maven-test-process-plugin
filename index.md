@@ -129,7 +129,7 @@ You can checkout the archives [here](https://groups.google.com/forum/#!forum/mav
 Source access
 -------------
 
-Via Github: [https://github.com/betfair/maven-test-process-plugin].
+Via Github: https://github.com/betfair/maven-test-process-plugin.
 
 Licensing
 ---------
