@@ -1,9 +1,9 @@
 ---
 ---
-maven-test-command-plugin
+maven-test-process-plugin
 =========================
 
-Welcome to the maven-test-command-plugin for [Apache Maven 2](http://maven.apache.org).
+Welcome to the maven-test-process-plugin for [Apache Maven 2](http://maven.apache.org).
 
 This plugin makes it easy to run integration tests as part of your Maven build which require starting up your application as a separate command. It was originally written to support containers who's start scripts are blocking in nature, therefore preventing use of more standard pre- and post- integration test phase tasks.
 
@@ -28,7 +28,7 @@ Add the plugin to your pom's build section:
             ...
             <plugin>
                 <groupId>com.betfair.plugins</groupId>
-                <artifactId>maven-test-command-plugin</artifactId>
+                <artifactId>maven-test-process-plugin</artifactId>
                 <version>1.2-SNAPSHOT</version>
                 <configuration>
                     <!-- Max time to allow for all containers to start -->
@@ -134,7 +134,7 @@ Via Github: [https://github.com/betfair/maven-test-process-plugin](https://githu
 Licensing
 ---------
 
-The maven-test-command-plugin is covered by "[The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)":
+The maven-test-process-plugin is covered by "[The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)":
 
     Copyright 2013, The Sporting Exchange Limited
     
