@@ -27,44 +27,45 @@ limitations under the License.
 	<artifactId>maven-test-process-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<version>1.2-SNAPSHOT</version>
-    <name>${artifactId}</name>
-    <description>Test process plugin</description>
-    <url>http://github.com/betfair/maven-test-process-plugin</url>
+    <name>maven-test-process-plugin</name>
+    <description>Simple plugin to aid testing against containers with blocking startup scripts</description>
 
-    <scm>
-        <connection>scm:git:git@github.com:betfair/maven-test-process-plugin.git</connection>
-        <url>scm:git:git@github.com:betfair/maven-test-process-plugin.git</url>
-        <developerConnection>scm:git:git@github.com:betfair/maven-test-process-plugin.git</developerConnection>
-    </scm>
+    <organization>
+        <name>Betfair</name>
+        <url>http://www.betfair.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>all</id>
+            <name>All developers</name>
+            <email>maven-test-process-plugin@googlegroups.com</email>
+        </developer>
+    </developers>
 
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <id>all</id>
-            <email>maven-test-process-plugin@googlegroups.com</email>
-            <name>Test Process Plugin Developers</name>
-        </developer>
-    </developers>
+    <url>http://github.com/betfair/maven-test-process-plugin</url>
 
     <mailingLists>
         <mailingList>
-            <name>Mailing list</name>
+            <name>maven-test-process-plugin user list</name>
             <post>maven-test-process-plugin@googlegroups.com</post>
+            <archive>https://groups.google.com/forum/#!forum/maven-test-process-plugin</archive>
         </mailingList>
     </mailingLists>
 
-    <organization>
-        <name>Betfair</name>
-        <url>http://www.betfair.com</url>
-    </organization>
+    <scm>
+        <connection>scm:git:git@github.com:betfair/maven-test-process-plugin.git</connection>
+        <url>scm:git:git@github.com:betfair/maven-test-process-plugin.git</url>
+        <developerConnection>scm:git:git@github.com:betfair/maven-test-process-plugin.git</developerConnection>
+    </scm>
 
 	<build>
 		<plugins>

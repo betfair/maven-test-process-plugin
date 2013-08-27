@@ -26,40 +26,51 @@ import java.util.Map;
 public class TestProcess {
 
 	/**
-	 * @parameter
-     * @required
+     * Id of this test process, must be unique.
+	 * @parameter default-value='default'
 	 */
 	private String id;
+
 	/**
+     * The command to execute this test process
 	 * @parameter
      * @required
 	 */
-	private String process;
+	private String command;
 
 	/**
+     * The working directory in which to run the command. This is relative to the directory the original maven command was run from.
 	 * @parameter
      * @required
 	 */
 	private String workingDir;
+
 	/**
+     * Time to wait prior to starting test process. If not specified there will be no delay.
 	 * @parameter
 	 */
 	private String startupDelay;
 
 	/**
+     * The maximum time allowed for this test process to complete. If not specified there will be no limit.
 	 * @parameter
 	 */
 	private String completionTimeout;
-   /**
-    * @parameter
-    */
-   private String failureWatchString;
-   /**
-    * @parameter
-    */
-   private String watchString;
 
     /**
+     * Text to look for in the process output to denote that the process has failed.
+     * @parameter
+     */
+    private String failureWatchString;
+
+    /**
+     * Text to look for in the process output to denote that the process has succeeded.
+     * @parameter
+     */
+    private String watchString;
+
+    /**
+     * Environment properties to set when starting the process.
      * @parameter
      */
     private Map<String,String> environmentProperties;
@@ -68,9 +79,9 @@ public class TestProcess {
     public TestProcess() {
     }
 
-    public TestProcess(String id, String process, String workingDir, String startupDelay, String completionTimeout, String failureWatchString, String watchString, Map<String,String> environmentProperties) {
+    public TestProcess(String id, String command, String workingDir, String startupDelay, String completionTimeout, String failureWatchString, String watchString, Map<String,String> environmentProperties) {
         this.id = id;
-        this.process = process;
+        this.command = command;
         this.workingDir = workingDir;
         this.startupDelay = startupDelay;
         this.completionTimeout = completionTimeout;
@@ -80,7 +91,7 @@ public class TestProcess {
     }
 
     public ProcessBuilder createProcessBuilder() {
-        String[] testProcessArgs = process.split(" ");
+        String[] testProcessArgs = command.split(" ");
         // deal with paths with a space in them, anything "quoted" will be merged into a single arg
         List<String> args = new ArrayList<String>();
         boolean inQuotes = false;
@@ -88,7 +99,7 @@ public class TestProcess {
         for (String s : testProcessArgs) {
             // we'll always start like this
             if (!inQuotes) {
-                // if we've found the start of the quotes, then start the process
+                // if we've found the start of the quotes, then start the command
                 if (s.startsWith("\"")) {
                     mergedItem = s;
                     inQuotes = true;
@@ -113,7 +124,7 @@ public class TestProcess {
         if (inQuotes) {
             throw new IllegalStateException("Found unmatched quotes in string: "+mergedItem);
         }
-        // now we can safely build the process
+        // now we can safely build the command
         ProcessBuilder testProcessBuilder = new ProcessBuilder(args);
         if (environmentProperties != null) {
             testProcessBuilder.environment().putAll(environmentProperties);
@@ -127,8 +138,8 @@ public class TestProcess {
         return id;
     }
 
-    public String getProcess() {
-        return process;
+    public String getCommand() {
+        return command;
     }
 
     public String getWorkingDir() {
