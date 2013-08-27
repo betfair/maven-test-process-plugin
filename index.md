@@ -122,7 +122,7 @@ Handily both of these are proxied by the following repository group:
 Mailing list
 ------------
 
-Please direct any questions to maven-test-process-plugin@googlegroups.com
+Please direct any questions to [maven-test-process-plugin@googlegroups.com](mailto:maven-test-process-plugin@googlegroups.com).
 
 You can checkout the archives [here](https://groups.google.com/forum/#!forum/maven-test-process-plugin).
 
