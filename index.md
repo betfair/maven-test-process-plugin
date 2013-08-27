@@ -118,13 +118,18 @@ Handily both of these are proxied by the following repository group:
             </releases>
         </pluginRepository>
     </pluginRepositories>
-
+    
 Mailing list
 ------------
 
 Please direct any questions to [maven-test-process-plugin@googlegroups.com](mailto:maven-test-process-plugin@googlegroups.com).
 
 You can checkout the archives [here](https://groups.google.com/forum/#!forum/maven-test-process-plugin).
+
+Source access
+-------------
+
+Via Github: [https://github.com/betfair/maven-test-process-plugin].
 
 Licensing
 ---------
