@@ -95,7 +95,7 @@ Add the plugin to your pom's build section:
 Releases
 --------
 
-None as yet, although we do have a 1.2-SNAPSHOT floating around in the OSS Sonatype repository. Latest maven documentation can be found [here](latest/maven).
+None as yet, although we do have a 1.2-SNAPSHOT floating around in the OSS Sonatype repository. Latest maven documentation can be found [here](master/maven).
 
 Maven Repositories
 ------------------
