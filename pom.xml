@@ -95,4 +95,11 @@ limitations under the License.
             <scope>test</scope>
         </dependency>
 	</dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>github-pages</id>
+            <url>file:${site.deploy.dir}</url>
+        </site>
+    </distributionManagement>
 </project>
