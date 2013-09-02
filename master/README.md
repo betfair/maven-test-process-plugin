@@ -1,12 +1,18 @@
 maven-test-process-plugin-documentation
 ---------------------------------------
 
-This repo contains the code to generate the site for [maven-test-process-plugin](http://github.com/betfair/maven-test-process-plugin). It publishes to the gh-pages branch of that project to push to t'internet.
+This repo contains the code to generate the site for [maven-test-process-plugin](http://github.com/betfair/maven-test-process-plugin). It publishes to the gh-pages branch of that project to push to [t'internet](http://betfair.github.io/maven-test-process-plugin/).
+
+Publishing
+----------
+
+Use [betfair/gh-pages-publishing](http://github.com/betfair/gh-pages-publishing).
+
 
 Licensing
 ---------
 
-The maven-test-command-plugin is covered by "[The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)":
+The maven-test-command-plugin-documentation is covered by "[The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)":
 
     Copyright 2013, The Sporting Exchange Limited
     
