@@ -24,7 +24,7 @@ Features
 Usage
 -----
 
-* [Latest release](master/usage.html).
+* [Latest release](master/usage.html)
 
 Maven Repositories
 ------------------
