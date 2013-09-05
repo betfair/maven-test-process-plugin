@@ -3,3 +3,6 @@ jdk:
   - oraclejdk7
   - openjdk6
   - openjdk7
+notifications:
+  email:
+    - maven-test-process-plugin-dev@googlegroups.com
