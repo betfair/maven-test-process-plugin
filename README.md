@@ -7,7 +7,7 @@ This plugin makes it easy to run integration tests as part of your Maven build w
 
 Documentation can be found [here](http://betfair.github.io/maven-test-process-plugin/).
 
-Travis CI status can be found [here](https://travis-ci.org/betfair/maven-test-process-plugin/builds).
+[![Build Status](https://travis-ci.org/betfair/maven-test-process-plugin.png?branch=master)](https://travis-ci.org/betfair/maven-test-process-plugin)
 
 Licensing
 ---------
