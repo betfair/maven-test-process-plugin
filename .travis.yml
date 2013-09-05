@@ -5,4 +5,7 @@ jdk:
   - openjdk7
 notifications:
   email:
-    - maven-test-process-plugin-dev@googlegroups.com
+    recipients:
+      - maven-test-process-plugin-dev@googlegroups.com
+    on_success: always
+    on_failure: always
