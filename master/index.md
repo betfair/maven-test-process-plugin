@@ -1,4 +1,6 @@
 ---
+layout: default
+title: maven-test-process-plugin
 ---
 maven-test-process-plugin
 =========================
