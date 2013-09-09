@@ -102,3 +102,5 @@ Handily both of these are proxied by the following repository group:
             </releases>
         </pluginRepository>
     </pluginRepositories>
+
+Wibble
