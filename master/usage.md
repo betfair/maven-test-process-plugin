@@ -73,8 +73,8 @@ Add the plugin to your pom's build section:
                 </configuration>
             </plugin>
             ...
-		</plugins>
-	</build>
+	</plugins>
+    </build>
 
 Maven doco
 ----------
