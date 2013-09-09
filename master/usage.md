@@ -1,4 +1,6 @@
 ---
+layout: default
+title: Usage: maven-test-process-plugin
 ---
 Usage Notes
 -----------
