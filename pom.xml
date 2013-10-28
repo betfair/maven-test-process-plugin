@@ -64,7 +64,8 @@ limitations under the License.
     <scm>
         <connection>scm:git:https://github.com/betfair/maven-test-process-plugin.git</connection>
         <url>scm:git:https://github.com/betfair/maven-test-process-plugin.git</url>
-        <developerConnection>scm:git:https://github.com/betfair/maven-test-process-plugin.git</developerConnection>
+        <!--developerConnection>scm:git:https://github.com/betfair/maven-test-process-plugin.git</developerConnection-->
+        <developerConnection>scm:git:ssh://git@github.com/betfair/maven-test-process-plugin.git</developerConnection>
     </scm>
 
     <build>
