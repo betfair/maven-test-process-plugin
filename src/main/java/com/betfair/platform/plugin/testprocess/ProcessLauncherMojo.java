@@ -62,6 +62,12 @@ public class ProcessLauncherMojo extends AbstractMojo {
     */
    private TestProcess[] testProcesses;
 
+    /**
+     * Environment variables which should never be dumped out to stdout when running
+     * @parameter default-value=''
+     */
+    private String privateEnvironmentVariables;
+
 
     private volatile boolean finishImmediately;
     private volatile boolean failed;
@@ -355,9 +361,11 @@ public class ProcessLauncherMojo extends AbstractMojo {
 
 
 	private void dumpEnvironment(Map<String, String> environtMap, String id) {
-		getLog().info(id+": Environment configuration");
+		getLog().debug(id+": Environment configuration");
 		for (String key : environtMap.keySet()) {
-			getLog().info("     " + key + "=" + environtMap.get(key));
+            if (!privateEnvironmentVariables.contains(key)) {
+			    getLog().debug("     " + key + "=" + environtMap.get(key));
+            }
 		}
 	}
 
